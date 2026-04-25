@@ -345,12 +345,12 @@ Todos son correctos. Lo importante no es el número exacto sino que sea **varios
 **P1.** Ejecutá `wc -l programa.i` y escribí el número de líneas que obtenés.
 
 <!-- Completá la línea siguiente con el número exacto (solo dígitos, sin espacios): -->
-LINEAS_I=
+LINEAS_I=2247
 
 ¿Por qué ese número es tan mayor que las 94 líneas de `programa.c`?
 
 > **R:**
-
+Porque el `#include` copia l contenido completo de los headers del sistema
 ---
 
 #### Herramienta: `grep`
@@ -388,12 +388,12 @@ grep "Archivo fuente principal" programa.i   # no debe encontrar nada
 ¿El comando encuentra algo o no devuelve nada?
 
 <!-- Completá con SI (si encontró algo) o NO (si no encontró nada): -->
-COMENTARIOS_EN_I=
+COMENTARIOS_EN_I=NO
 
 ¿Por qué ocurre eso?
 
 > **R:**
-
+Porque las lineas de comentario desaparecen en el preprocesamiento.
 ---
 
 #### Observación 2: Las macros se expanden
@@ -422,23 +422,23 @@ Nótese que `CUADRADO(5)` se expande a `((5) * (5))`, con los paréntesis extra 
 **P3.** Ejecutá `grep -n "CUADRADO" programa.i` y copiá la salida completa.
 
 > **R:**
-
+2216:    printf("CUADRADO(%d)      = %d\n", 5, ((5) * (5)));
 ¿El nombre `CUADRADO` aparece tal cual en `programa.i`, o fue reemplazado
 por otra cosa? Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-CUADRADO_EN_I=
+CUADRADO_EN_I=SI
 
 ---
 
 **P4.** Ejecutá `grep -n '"1\.0"' programa.i` y copiá la línea encontrada.
 
 > **R:**
-
+2207:    printf("=== Laboratorio de Compilacion en C (v%s) ===\n\n", "1.0");
 ¿Cuál era el nombre de la macro en `programa.c` que fue reemplazada por `"1.0"`?
 
 <!-- Completá con el nombre exacto de la macro (en mayúsculas, como está en el fuente): -->
-NOMBRE_MACRO_VERSION=
+NOMBRE_MACRO_VERSION=VERSION
 
 ---
 
@@ -476,11 +476,13 @@ gcc -E -DDEBUG programa.c | grep "Iniciando"
 
 > **R:**
 
+printf("[DEBUG] %s\n", ("Iniciando main"));
+
 ¿Agregar `-DDEBUG` hace que aparezca código nuevo en el `.i` que antes no estaba?
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-DEBUG_ACTIVA_CODIGO=
+DEBUG_ACTIVA_CODIGO=SI
 
 ---
 
@@ -504,7 +506,11 @@ grep -n "stdio.h" programa.i | head -5
 ¿Qué información comunican esas líneas `# N "archivo"`? ¿De qué archivo proviene el bloque que contiene la declaración de `printf`?
 
 > **R:**
-
+6:# 1 "C:/msys64/ucrt64/include/stdio.h" 1 3
+7:# 9 "C:/msys64/ucrt64/include/stdio.h" 3
+179:# 10 "C:/msys64/ucrt64/include/stdio.h" 2 3
+190:# 33 "C:/msys64/ucrt64/include/stdio.h" 3
+194:# 46 "C:/msys64/ucrt64/include/stdio.h" 3
 ---
 
 ## Etapa 2: Compilación (Análisis + Generación de código)
@@ -660,13 +666,16 @@ Aparecen como instrucciones de llamada (por ejemplo `bl _area_circulo`), pero **
 **P7.** Ejecutá `grep "area_circulo" programa.s` y copiá la salida.
 
 > **R:**
+    .ascii "area_circulo(%.1f) = %.4f\12\0"
+    call    area_circulo
+    .def    area_circulo;   .scl    2;      .type   32;     .endef
 
 ¿`area_circulo` aparece como una función *definida* en `programa.s`
 (con su propio bloque de instrucciones) o solo como una *llamada* (instrucción sin cuerpo)?
 Respondé DEFINIDA o LLAMADA:
 
 <!-- Completá con DEFINIDA o LLAMADA: -->
-AREA_EN_S=
+AREA_EN_S=LLAMADA
 
 ---
 
@@ -674,7 +683,10 @@ AREA_EN_S=
 las primeras 4 líneas de instrucciones que le siguen.
 
 > **R:**
-
+	pushq	%rbp
+	.seh_pushreg	%rbp
+	movq	%rsp, %rbp
+	.seh_setframe	%rbp, 0
 Explicá en términos generales qué hacen esas instrucciones
 (usá los comentarios del laboratorio como guía):
 
@@ -692,12 +704,17 @@ grep "llamadas" programa.s
 **P9.** Ejecutá `grep "llamadas" programa.s` y copiá la salida.
 
 > **R:**
+        .globl  llamadas
+llamadas:
+        movl    llamadas(%rip), %eax
+        movl    %eax, llamadas(%rip)
+        movl    llamadas(%rip), %eax
 
 ¿Aparece la variable `llamadas` en el ensamblador?
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-LLAMADAS_EN_S=
+LLAMADAS_EN_S=SI
 
 ---
 
