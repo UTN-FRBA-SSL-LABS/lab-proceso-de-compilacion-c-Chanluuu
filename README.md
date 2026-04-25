@@ -819,12 +819,28 @@ Salida esperada (simplificada):
 **P10.** Ejecutá `nm programa.o` y copiá la salida completa.
 
 > **R:**
+0000000000000000 b .bss
+0000000000000000 d .data
+0000000000000000 p .pdata
+0000000000000000 r .rdata
+0000000000000000 r .rdata$zzz
+0000000000000000 t .text
+0000000000000000 r .xdata
+                 U __main
+                 U area_circulo
+                 U factorial
+0000000000000149 T imprimir_separador
+0000000000000000 B llamadas
+0000000000000023 T main
+                 U printf
+                 U puts
+0000000000000000 T sumar
 
 ¿Con qué letra aparece `area_circulo` en esa tabla?
 Escribí solo la letra (una mayúscula):
 
 <!-- Completá con la letra exacta que muestra nm (U, T, D, etc.): -->
-TIPO_AREA_EN_O=
+TIPO_AREA_EN_O=U
 
 ---
 
@@ -845,12 +861,12 @@ nm matematica.o
 pero tipo `T` en `matematica.o`?
 
 > **R:**
-
+Porque corresponde a archivos diferentes
 ¿Qué etapa del proceso de compilación resuelve esa diferencia?
 Respondé con una palabra: PREPROCESAMIENTO, COMPILACION, ENSAMBLADO o ENLAZADO:
 
 <!-- Completá con una de las cuatro opciones: -->
-ETAPA_QUE_RESUELVE=
+ETAPA_QUE_RESUELVE=ENLAZADO
 
 ---
 
@@ -870,12 +886,13 @@ Un `.o` no es ejecutable por dos razones:
 **P12.** Intentá ejecutar `./programa.o` directamente. ¿Qué mensaje aparece?
 
 > **R:**
+bash: ./programa.o: cannot execute binary file: Exec format error
 
 ¿Se puede ejecutar un archivo `.o` directamente?
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-EJECUTABLE_O=
+EJECUTABLE_O=NO
 
 ---
 
@@ -965,12 +982,12 @@ nm programa | grep area_circulo
 Ejecutá `nm programa | grep "area_circulo"` y copiá la salida.
 
 > **R:**
-
+0000000140001600 T area_circulo
 ¿Con qué letra aparece ahora `area_circulo` en el ejecutable final?
 Escribí solo la letra:
 
 <!-- Completá con la letra exacta que muestra nm: -->
-TIPO_AREA_ENLAZADO=
+TIPO_AREA_ENLAZADO=T
 
 ---
 
@@ -987,17 +1004,18 @@ Quedan algunos `U` incluso en el ejecutable final. ¿Por qué? Son funciones de 
 **P14.** Ejecutá `nm programa | grep "^ *U"` y copiá la salida.
 
 > **R:**
+U __end__
 
 ¿Quedan símbolos de tipo `U` en el ejecutable final?
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-SIMBOLOS_U_FINAL=
+SIMBOLOS_U_FINAL=NO
 
 ¿Por qué quedan? ¿Quién los resuelve y cuándo?
 
 > **R:**
-
+No quedan ya que el enlazador se encarga de arreglar las correspondencias de archivos.
 ---
 
 #### Ejecutar
@@ -1011,11 +1029,27 @@ SIMBOLOS_U_FINAL=
 **P15.** Ejecutá `./programa` y copiá la salida completa.
 
 > **R:**
+=== Laboratorio de Compilacion en C (v1.0) ===
+
+sumar(3, 4)       = 7
+CUADRADO(5)      = 25
+MAX(7, 12)        = 12
+----------------------------------------
+area_circulo(5.0) = 78.5398
+Factoriales:
+  0! = 1
+  1! = 1
+  2! = 2
+  3! = 6
+  4! = 24
+  5! = 120
+----------------------------------------
+Llamadas a sumar(): 1
 
 ¿Qué valor da `factorial(5)`? Escribí solo el número:
 
 <!-- Completá con el número exacto: -->
-FACTORIAL_5=
+FACTORIAL_5=120
 
 ---
 
